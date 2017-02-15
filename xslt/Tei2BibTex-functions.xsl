@@ -79,17 +79,43 @@
         <xsl:variable name="vUrl" select="concat($vgFileUrl, '#', @xml:id)"/>
         <xsl:variable name="v_issue">
             <xsl:choose>
-                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@n">
-                    <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@n"/>
-                </xsl:when>
-                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@from">
+                <!-- check for correct encoding of issue information -->
+                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@from = $vBiblStructSource//tei:biblScope[@unit = 'issue']/@to">
                     <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@from"/>
+                </xsl:when>
+                <!-- check for ranges -->
+                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@from != $vBiblStructSource//tei:biblScope[@unit = 'issue']/@to">
+                    <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@from"/>
+                    <!-- probably an en-dash is the better option here -->
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@to"/>
                 </xsl:when>
+                <!-- fallback: erroneous encoding of issue information with @n -->
+                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@n">
+                    <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'issue']/@n"/>
+                </xsl:when>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="vVolume" select="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@n"/>
+        <xsl:variable name="v_volume">
+            <xsl:choose>
+                <!-- check for correct encoding of volume information -->
+                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@from = $vBiblStructSource//tei:biblScope[@unit = 'volume']/@to">
+                    <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@from"/>
+                </xsl:when>
+                <!-- check for ranges -->
+                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@from != $vBiblStructSource//tei:biblScope[@unit = 'volume']/@to">
+                    <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@from"/>
+                    <!-- probably an en-dash is the better option here -->
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@to"/>
+                </xsl:when>
+                <!-- fallback: erroneous encoding of volume information with @n -->
+                <xsl:when test="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@n">
+                    <xsl:value-of select="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@n"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+<!--        <xsl:variable name="v_volume" select="$vBiblStructSource//tei:biblScope[@unit = 'volume']/@n"/>-->
         <xsl:variable name="vPages">
             <xsl:value-of select="preceding::tei:pb[@ed = 'print'][1]/@n"/>
             <xsl:if
@@ -138,7 +164,7 @@
             <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
             <!-- imprint -->
             <xsl:text>volume = {</xsl:text>
-            <xsl:value-of select="$vVolume"/>
+            <xsl:value-of select="$v_volume"/>
             <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
             <xsl:text>number = {</xsl:text>
             <xsl:value-of select="$v_issue"/>
