@@ -182,12 +182,14 @@
             <xsl:value-of select="@xml:lang"/>
             <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
             <!-- publication dates -->
-            <xsl:text>day = {</xsl:text>
-            <xsl:value-of select="day-from-date($v_date-publication/descendant-or-self::tei:date/@when)"/>
-            <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
-            <xsl:text>month = {</xsl:text>
-            <xsl:value-of select="month-from-date($v_date-publication/descendant-or-self::tei:date/@when)"/>
-            <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
+            <xsl:if test="string-length($v_date-publication/descendant-or-self::tei:date/@when)=10">
+                <xsl:text>day = {</xsl:text>
+                <xsl:value-of select="day-from-date($v_date-publication/descendant-or-self::tei:date/@when)"/>
+                <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
+                <xsl:text>month = {</xsl:text>
+                <xsl:value-of select="month-from-date($v_date-publication/descendant-or-self::tei:date/@when)"/>
+                <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
+            </xsl:if>
             <xsl:text>year = {</xsl:text>
             <xsl:value-of select="year-from-date($v_date-publication/descendant-or-self::tei:date/@when)"/>
             <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
