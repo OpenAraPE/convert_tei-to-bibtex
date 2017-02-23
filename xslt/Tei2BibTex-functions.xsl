@@ -190,9 +190,9 @@
                 <xsl:value-of select="month-from-date($v_date-publication/descendant-or-self::tei:date/@when)"/>
                 <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
             </xsl:if>
-            <!-- this produces an error if the @when attributes contains only a four-digit year -->
+            <!-- year-from-date works only with xs:date, which requires YYYY-MM-DD -->
             <xsl:text>year = {</xsl:text>
-            <xsl:value-of select="year-from-date($v_date-publication/descendant-or-self::tei:date/@when)"/>
+            <xsl:value-of select="substring($v_date-publication/descendant-or-self::tei:date/@when,1,4)"/>
             <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
             <!-- URL -->
             <xsl:text>url = {</xsl:text>
