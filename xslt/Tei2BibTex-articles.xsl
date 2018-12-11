@@ -21,8 +21,7 @@
 
     
     <xsl:template
-        match="tei:div[@type = 'section'][not(ancestor::tei:div[@type = 'article'])][not(ancestor::tei:div[@type = 'bill'])] |
-        tei:div[@type = 'section'][not(ancestor::tei:div[@type = 'item'])][not(ancestor::tei:div[@type = 'bill'])] |
+        match="tei:div[@type = 'section'][not(ancestor::tei:div[@type = 'article'])][not(ancestor::tei:div[@type = 'bill'])][not(ancestor::tei:div[@type = 'item'])] |
         tei:div[@type = 'article'][not(ancestor::tei:div[@type = 'bill'])] | 
         tei:div[@type = 'item'][not(ancestor::tei:div[@type = 'bill'])] | 
         tei:div[@type = 'bill']">
