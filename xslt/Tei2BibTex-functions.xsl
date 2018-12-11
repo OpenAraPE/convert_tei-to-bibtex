@@ -36,7 +36,7 @@
         <!-- Need information on edition, date of edition, editors, transcribers etc.  -->
         <!-- variables identifying the original source -->
         <xsl:variable name="vBiblStructSource"
-            select="ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct"/>
+            select="ancestor::tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblStruct[1]"/>
         <xsl:variable name="v_date-publication">
             <xsl:variable name="v_date" select="$vBiblStructSource/tei:monogr/tei:imprint/tei:date[1]"/>
             <xsl:choose>
