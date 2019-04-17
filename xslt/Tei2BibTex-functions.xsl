@@ -66,14 +66,25 @@
         </xsl:variable>
         <xsl:variable name="vAuthor">
                 <xsl:choose>
-                    <xsl:when test="tei:byline/descendant::tei:persName/tei:surname">
-                        <xsl:value-of select="tei:byline/descendant::tei:persName/tei:surname"/>
-                        <xsl:text>, </xsl:text>
-                        <xsl:value-of select="tei:byline/descendant::tei:persName/tei:forename"/>
-                    </xsl:when>
+                    <!-- new -->
                     <xsl:when test="tei:byline/descendant::tei:persName">
-                        <xsl:value-of select="tei:byline/descendant::tei:persName"/>
+                            <xsl:apply-templates select="tei:byline/descendant::tei:persName"/>
+                        </xsl:when>
+                        <xsl:when test="descendant::tei:note[@type = 'bibliographic']/tei:bibl/tei:author">
+                            <xsl:apply-templates select="descendant::tei:note[@type = 'bibliographic']/tei:bibl/tei:author/tei:persName"/>
+                        </xsl:when>
+                        <xsl:when test="descendant::tei:note[@type = 'bibliographic']/tei:bibl/tei:title[@level = 'j']">
+                            <xsl:apply-templates select="descendant::tei:note[@type = 'bibliographic']/tei:bibl/tei:title[@level = 'j']" mode="m_plain-text"/>
+                        </xsl:when>
+                    <!-- old -->
+                    <!--<xsl:when test="child::tei:byline/tei:persName/tei:surname">
+                        <xsl:value-of select="child::tei:byline/tei:persName/tei:surname"/>
+                        <xsl:text>, </xsl:text>
+                        <xsl:value-of select="child::tei:byline/tei:persName/tei:forename"/>
                     </xsl:when>
+                    <xsl:when test="child::tei:byline/tei:persName">
+                        <xsl:value-of select="child::tei:byline/tei:persName"/>
+                    </xsl:when>-->
                 </xsl:choose>
         </xsl:variable>
         <xsl:variable name="vUrl" select="concat($vgFileUrl, '#', @xml:id)"/>
@@ -135,16 +146,7 @@
             <!-- author information -->
             <xsl:if test="child::tei:byline/tei:persName">
                 <xsl:text>author = {</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="child::tei:byline/tei:persName/tei:surname">
-                        <xsl:value-of select="child::tei:byline/tei:persName/tei:surname"/>
-                        <xsl:text>, </xsl:text>
-                        <xsl:value-of select="child::tei:byline/tei:persName/tei:forename"/>
-                    </xsl:when>
-                    <xsl:when test="child::tei:byline/tei:persName">
-                        <xsl:value-of select="child::tei:byline/tei:persName"/>
-                    </xsl:when>
-                </xsl:choose>
+                <xsl:value-of select="$vAuthor"/>
                 <xsl:text>}, </xsl:text><xsl:value-of select="$vN"/>
             </xsl:if>
             <!-- editor information -->
@@ -217,6 +219,20 @@
     <xsl:template match="tei:head/tei:note" mode="m_plain-text"/>
     <xsl:template match="tei:head" mode="m_plain-text">
         <xsl:apply-templates mode="m_plain-text"/>
+    </xsl:template>
+    
+    <!-- authors -->
+    <xsl:template  match="tei:persName">
+        <xsl:choose>
+            <xsl:when test="tei:surname and tei:forename">
+               <xsl:apply-templates select="tei:surname" mode="m_plain-text"/>
+                <xsl:text>, </xsl:text>
+                <xsl:apply-templates select="tei:forename" mode="m_plain-text"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="m_plain-text"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!-- plain text output: beware that heavily marked up nodes will have most whitespace omitted -->
