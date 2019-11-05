@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:tei="http://www.tei-c.org/ns/1.0" xpath-default-namespace="http://www.tei-c.org/ns/1.0"
-    version="2.0">
+    version="3.0">
     <xsl:output method="text" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" name="text"/>
     <xsl:strip-space elements="*"/>
 
@@ -17,14 +17,22 @@
 
     <xsl:variable name="vFileId" select="tei:TEI/@xml:id"/>
     <xsl:variable name="vgFileUrl">
-        <xsl:choose>
+       <xsl:analyze-string select="tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[@type='url'][1]" regex="https*://github\.com/(\w+)/(.+?)/blob/master/(.+\.xml)">
+                    <xsl:matching-substring>
+                        <xsl:value-of select="concat('https://',regex-group(1),'.github.io/',regex-group(2),'/',regex-group(3))"/>
+                    </xsl:matching-substring>
+                    <xsl:non-matching-substring>
+                        <xsl:value-of select="."/>
+                    </xsl:non-matching-substring>
+                </xsl:analyze-string>
+        <!--<xsl:choose>
             <xsl:when test=" contains(/tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[@type='url'],'github.com/')">
                 <xsl:value-of select=" replace(replace(/tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:idno[@type='url'],'github.com', 'rawgit.com'),'blob/','')"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="concat('https://rawgit.com/tillgrallert/digital-muqtabas/master/xml/', tokenize(base-uri(), '/')[last()])"/>
             </xsl:otherwise>
-        </xsl:choose>
+        </xsl:choose>-->
     </xsl:variable>
     <xsl:variable name="vN" select="'&#x0A;'"/>
     
