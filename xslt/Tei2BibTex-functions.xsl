@@ -58,8 +58,8 @@
         <xsl:variable name="vPublicationTitle"
             select="$vBiblStructSource/tei:monogr/tei:title[@level = 'j'][@xml:lang = $vLang][not(@type = 'sub')]"/>
         <xsl:variable name="vArticleTitle">
-            <xsl:if test="@type = 'article' and ancestor::tei:div[@type = 'section']">
-                <xsl:apply-templates select="ancestor::tei:div[@type = 'section']/tei:head" mode="m_plain-text"/>
+            <xsl:if test="@type = 'item' and parent::tei:div[@type = 'section']">
+                <xsl:apply-templates select="parent::tei:div[@type = 'section']/tei:head" mode="m_plain-text"/>
                 <xsl:text>: </xsl:text>
             </xsl:if>
             <xsl:apply-templates select="./tei:head" mode="m_plain-text"/>
